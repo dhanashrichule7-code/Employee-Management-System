@@ -5,6 +5,7 @@ import EmployeeForm from "../components/EmployeeForm";
 function Home() {
 
   const [refresh, setRefresh] = useState(false);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
 
   return (
     <div className="container mt-4">
@@ -14,13 +15,16 @@ function Home() {
       </h1>
 
       <EmployeeForm
-        refresh={refresh}
-        setRefresh={setRefresh}
-      />
+  refresh={refresh}
+  setRefresh={setRefresh}
+  selectedEmployee={selectedEmployee}
+  setSelectedEmployee={setSelectedEmployee}
+/>
 
       <EmployeeList
-        refresh={refresh}
-      />
+  refresh={refresh}
+  setSelectedEmployee={setSelectedEmployee}
+/>
 
     </div>
   );

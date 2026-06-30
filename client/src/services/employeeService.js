@@ -7,14 +7,17 @@ export const getEmployees = async () => {
   return response.data;
 };
 
-export const deleteEmployee = async (id) => {
-  const response = await axios.delete(
-    `http://localhost:5000/api/employees/delete/${id}`
-  );
+export const createEmployee = async (employee) => {
+  const response = await axios.post(`${API}/create`, employee);
   return response.data;
 };
 
-export const createEmployee = async (employee) => {
-  const response = await axios.post(`${API}/create`, employee);
+export const updateEmployee = async (id, employee) => {
+  const response = await axios.put(`${API}/update/${id}`, employee);
+  return response.data;
+};
+
+export const deleteEmployee = async (id) => {
+  const response = await axios.delete(`${API}/delete/${id}`);
   return response.data;
 };

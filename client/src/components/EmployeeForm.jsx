@@ -1,16 +1,39 @@
-import { useState } from "react";
-import { createEmployee } from "../services/employeeService";
+import { useState, useEffect } from "react";
+import {
+  createEmployee,
+  updateEmployee,
+} from "../services/employeeService";
 
-
-function EmployeeForm({ refresh, setRefresh }) {
+function EmployeeForm({
+  refresh,
+  setRefresh,
+  selectedEmployee,
+  setSelectedEmployee,
+}) {
 
   const [employee, setEmployee] = useState({
     name: "",
     email: "",
+    phone: "",
     department: "",
     position: "",
     salary: ""
   });
+
+ useEffect(() => {
+  if (selectedEmployee) {
+    setEmployee(selectedEmployee);
+  } else {
+    setEmployee({
+      name: "",
+      email: "",
+      phone: "",
+      department: "",
+      position: "",
+      salary: "",
+    });
+  }
+}, [selectedEmployee]);
 
   const handleChange = (e) => {
     setEmployee({
@@ -23,9 +46,20 @@ function EmployeeForm({ refresh, setRefresh }) {
   e.preventDefault();
 
   try {
-    await createEmployee(employee);
 
-    alert("Employee Added Successfully");
+    if (selectedEmployee) {
+
+      await updateEmployee(selectedEmployee._id, employee);
+
+      alert("Employee Updated Successfully");
+
+    } else {
+
+      await createEmployee(employee);
+
+      alert("Employee Added Successfully");
+
+    }
 
     setEmployee({
       name: "",
@@ -35,6 +69,8 @@ function EmployeeForm({ refresh, setRefresh }) {
       position: "",
       salary: "",
     });
+
+    setSelectedEmployee(null);
 
     setRefresh(!refresh);
 
@@ -47,7 +83,7 @@ function EmployeeForm({ refresh, setRefresh }) {
     <div className="card shadow p-4 mb-4">
 
       <h3 className="text-center mb-4">
-        Add Employee
+            {selectedEmployee ? "Update Employee" : "Add Employee"}
       </h3>
 
       <form onSubmit={handleSubmit}>
@@ -119,10 +155,10 @@ function EmployeeForm({ refresh, setRefresh }) {
         </div>
 
         <button
-          className="btn btn-primary w-100"
-          type="submit"
-        >
-          Add Employee
+             className="btn btn-primary w-100"
+                 type="submit"
+         >
+                {selectedEmployee ? "Update Employee" : "Add Employee"}
         </button>
 
       </form>
