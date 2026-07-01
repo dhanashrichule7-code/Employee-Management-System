@@ -7,6 +7,8 @@ import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 
 
@@ -139,6 +141,37 @@ const exportToExcel = () => {
   saveAs(fileData, "Employees.xlsx");
 };
 
+const exportToPDF = () => {
+
+  const doc = new jsPDF();
+
+  doc.setFontSize(18);
+  doc.text("Employee Management System", 14, 20);
+
+  autoTable(doc, {
+    startY: 30,
+    head: [[
+      "Name",
+      "Email",
+      "Phone",
+      "Department",
+      "Position",
+      "Salary"
+    ]],
+
+    body: filteredEmployees.map((emp) => [
+      emp.name,
+      emp.email,
+      emp.phone,
+      emp.department,
+      emp.position,
+      `Rs. ${emp.salary}`,
+    ]),
+  });
+
+  doc.save("Employees.pdf");
+};
+
 
 
   // Dashboard Data
@@ -248,13 +281,23 @@ const exportToExcel = () => {
   </select>
 </div>
 
-    <div className="mb-3 text-end">
+    
+ <div className="mb-3 d-flex justify-content-end gap-2">
+
   <button
     className="btn btn-success"
     onClick={exportToExcel}
   >
-    Export to Excel
+    📗 Export Excel
   </button>
+
+  <button
+    className="btn btn-danger"
+    onClick={exportToPDF}
+  >
+    📄 Export PDF
+  </button>
+
 </div>
 
 
@@ -288,7 +331,7 @@ const exportToExcel = () => {
 
                     <td>{employee.position}</td>
 
-                    <td>₹ {employee.salary}</td>
+                    <td>₹ {employee.salary} </td>
 
                     <td>
 
