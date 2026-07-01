@@ -3,8 +3,13 @@ import {
   getEmployees,
   deleteEmployee,
 } from "../services/employeeService";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
+
+
+
 
 function EmployeeList({ refresh, setSelectedEmployee }) {
   const [employees, setEmployees] = useState([]);
@@ -57,6 +62,8 @@ const employeesPerPage = 5;
   }
 };
 
+
+
   // Search Filter
   const filteredEmployees = employees.filter((employee) => {
 
@@ -103,6 +110,35 @@ const currentEmployees = sortedEmployees.slice(
 const totalPages = Math.ceil(
   sortedEmployees.length / employeesPerPage
 );
+
+const exportToExcel = () => {
+  const data = filteredEmployees.map((emp) => ({
+    Name: emp.name,
+    Email: emp.email,
+    Phone: emp.phone,
+    Department: emp.department,
+    Position: emp.position,
+    Salary: emp.salary,
+  }));
+
+  const worksheet = XLSX.utils.json_to_sheet(data);
+  const workbook = XLSX.utils.book_new();
+
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Employees");
+
+  const excelBuffer = XLSX.write(workbook, {
+    bookType: "xlsx",
+    type: "array",
+  });
+
+  const fileData = new Blob([excelBuffer], {
+    type:
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
+  });
+
+  saveAs(fileData, "Employees.xlsx");
+};
+
 
 
   // Dashboard Data
@@ -212,7 +248,14 @@ const totalPages = Math.ceil(
   </select>
 </div>
 
-
+    <div className="mb-3 text-end">
+  <button
+    className="btn btn-success"
+    onClick={exportToExcel}
+  >
+    Export to Excel
+  </button>
+</div>
 
 
           {/* Table */}
