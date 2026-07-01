@@ -10,6 +10,7 @@ function EmployeeForm({
   setRefresh,
   selectedEmployee,
   setSelectedEmployee,
+  darkMode,
 }) {
 
   const [employee, setEmployee] = useState({
@@ -100,7 +101,11 @@ const handleSubmit = async (e) => {
 };
 
   return (
-    <div className="card shadow p-4 mb-4">
+    <div
+  className={`card shadow p-4 mb-4 ${
+    darkMode ? "bg-secondary text-white" : ""
+  }`}
+>
 
       <h3 className="text-center mb-4">
             {selectedEmployee ? "Update Employee" : "Add Employee"}
@@ -113,7 +118,9 @@ const handleSubmit = async (e) => {
             type="text"
             name="name"
             placeholder="Employee Name"
-            className="form-control"
+            className={`form-control ${
+            darkMode ? "bg-dark text-white border-light" : ""
+            }`}
             value={employee.name}
             onChange={handleChange}
           />
@@ -124,7 +131,9 @@ const handleSubmit = async (e) => {
             type="email"
             name="email"
             placeholder="Email"
-            className="form-control"
+            className={`form-control ${
+            darkMode ? "bg-dark text-white border-light" : ""
+            }`}
             value={employee.email}
             onChange={handleChange}
           />
@@ -135,7 +144,9 @@ const handleSubmit = async (e) => {
             type="text"
             name="phone"
             placeholder="Phone Number"
-            className="form-control"
+            className={`form-control ${
+            darkMode ? "bg-dark text-white border-light" : ""
+            }`}
             value={employee.phone}
             onChange={handleChange}
           />
@@ -146,7 +157,9 @@ const handleSubmit = async (e) => {
             type="text"
             name="department"
             placeholder="Department"
-            className="form-control"
+            className={`form-control ${
+            darkMode ? "bg-dark text-white border-light" : ""
+            }`}
             value={employee.department}
             onChange={handleChange}
           />
@@ -157,7 +170,9 @@ const handleSubmit = async (e) => {
             type="text"
             name="position"
             placeholder="Position"
-            className="form-control"
+            className={`form-control ${
+            darkMode ? "bg-dark text-white border-light" : ""
+            }`}
             value={employee.position}
             onChange={handleChange}
           />
@@ -168,7 +183,9 @@ const handleSubmit = async (e) => {
             type="number"
             name="salary"
             placeholder="Salary"
-            className="form-control"
+            className={`form-control ${
+            darkMode ? "bg-dark text-white border-light" : ""
+            }`}
             value={employee.salary}
             onChange={handleChange}
           />

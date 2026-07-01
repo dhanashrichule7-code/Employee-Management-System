@@ -13,7 +13,7 @@ import autoTable from "jspdf-autotable";
 
 
 
-function EmployeeList({ refresh, setSelectedEmployee }) {
+function EmployeeList({ refresh, setSelectedEmployee, darkMode }) {
   const [employees, setEmployees] = useState([]);
   const [search, setSearch] = useState("");
   const [departmentFilter, setDepartmentFilter] = useState("All");
@@ -197,7 +197,13 @@ const exportToPDF = () => {
       <div className="row mb-4">
 
         <div className="col-md-3">
-          <div className="card text-center shadow border-0 bg-primary text-white">
+          <div
+          className={`card text-center shadow border-0 ${
+            darkMode
+          ? "bg-dark text-white border-light"
+          : "bg-primary text-white"
+         }`}
+         >
             <div className="card-body">
               <h5>Total Employees</h5>
               <h2>{totalEmployees}</h2>
@@ -206,7 +212,13 @@ const exportToPDF = () => {
         </div>
 
         <div className="col-md-3">
-          <div className="card text-center shadow border-0 bg-success text-white">
+          <div
+           className={`card text-center shadow border-0 ${
+             darkMode
+            ? "bg-dark text-white border-light"
+            : "bg-primary text-white"
+           }`}
+          >
             <div className="card-body">
               <h5>IT Department</h5>
               <h2>{itEmployees}</h2>
@@ -215,7 +227,13 @@ const exportToPDF = () => {
         </div>
 
         <div className="col-md-3">
-          <div className="card text-center shadow border-0 bg-warning">
+          <div
+            className={`card text-center shadow border-0 ${
+            darkMode
+            ? "bg-dark text-white border-light"
+            : "bg-primary text-white"
+           }`}
+          >
             <div className="card-body">
               <h5>HR Department</h5>
               <h2>{hrEmployees}</h2>
@@ -224,7 +242,13 @@ const exportToPDF = () => {
         </div>
 
         <div className="col-md-3">
-          <div className="card text-center shadow border-0 bg-info text-white">
+          <div
+            className={`card text-center shadow border-0 ${
+            darkMode
+            ? "bg-dark text-white border-light"
+            : "bg-primary text-white"
+            }`}
+           >
             <div className="card-body">
               <h5>Total Salary</h5>
               <h5>₹ {totalSalary}</h5>
@@ -235,19 +259,27 @@ const exportToPDF = () => {
       </div>
 
       {/* Employee List */}
-      <div className="card shadow">
-
+      <div
+        className={`card shadow ${
+       darkMode ? "bg-secondary text-white" : ""
+      }`}
+      >
         <div className="card-header bg-primary text-white">
           <h3 className="mb-0">Employee List</h3>
         </div>
 
-        <div className="card-body">
-
+        <div
+           className={`card-body ${
+           darkMode ? "bg-secondary text-white" : ""
+          }`}
+         >
           {/* Search Box */}
           <div className="mb-3">
             <input
               type="text"
-              className="form-control"
+              className={`form-control ${
+             darkMode ? "bg-dark text-white border-light" : ""
+            }`}
               placeholder="Search Employee by Name..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -256,7 +288,9 @@ const exportToPDF = () => {
 
 <div className="mb-3">
   <select
-    className="form-select"
+    className={`form-select ${
+    darkMode ? "bg-dark text-white border-light" : ""
+    }`}
     value={departmentFilter}
     onChange={(e) => setDepartmentFilter(e.target.value)}
   >
@@ -270,7 +304,9 @@ const exportToPDF = () => {
 
 <div className="mb-3">
   <select
-    className="form-select"
+    className={`form-select ${
+    darkMode ? "bg-dark text-white border-light" : ""
+    }`}
     value={sortBy}
     onChange={(e) => setSortBy(e.target.value)}
   >
@@ -302,9 +338,12 @@ const exportToPDF = () => {
 
 
           {/* Table */}
-          <table className="table table-bordered table-hover text-center align-middle">
-
-            <thead className="table-dark">
+          <table
+            className={`table table-bordered table-hover text-center align-middle ${
+            darkMode ? "table-dark" : ""
+          }`}
+          >
+            <thead className={darkMode ? "table-dark" : "table-primary"}>
               <tr>
                 <th>Sr No.</th>
                 <th>Name</th>
