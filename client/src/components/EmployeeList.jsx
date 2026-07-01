@@ -9,6 +9,11 @@ import Swal from "sweetalert2";
 function EmployeeList({ refresh, setSelectedEmployee }) {
   const [employees, setEmployees] = useState([]);
   const [search, setSearch] = useState("");
+  const [departmentFilter, setDepartmentFilter] = useState("All");
+  const [sortBy, setSortBy] = useState("");
+
+  const [currentPage, setCurrentPage] = useState(1);
+const employeesPerPage = 5;
 
   useEffect(() => {
     fetchEmployees();
@@ -53,9 +58,52 @@ function EmployeeList({ refresh, setSelectedEmployee }) {
 };
 
   // Search Filter
-  const filteredEmployees = employees.filter((employee) =>
-    employee.name.toLowerCase().includes(search.toLowerCase())
+  const filteredEmployees = employees.filter((employee) => {
+
+  const matchName =
+    employee.name.toLowerCase().includes(search.toLowerCase());
+
+  const matchDepartment =
+    departmentFilter === "All" ||
+    employee.department === departmentFilter;
+
+  return matchName && matchDepartment;
+
+});
+
+
+const sortedEmployees = [...filteredEmployees];
+
+if (sortBy === "name") {
+  sortedEmployees.sort((a, b) =>
+    a.name.localeCompare(b.name)
   );
+}
+
+if (sortBy === "salaryLow") {
+  sortedEmployees.sort(
+    (a, b) => a.salary - b.salary
+  );
+}
+
+if (sortBy === "salaryHigh") {
+  sortedEmployees.sort(
+    (a, b) => b.salary - a.salary
+  );
+}
+
+// Pagination
+const indexOfLastEmployee = currentPage * employeesPerPage;
+const indexOfFirstEmployee = indexOfLastEmployee - employeesPerPage;
+
+const currentEmployees = sortedEmployees.slice(
+  indexOfFirstEmployee,
+  indexOfLastEmployee
+);
+const totalPages = Math.ceil(
+  sortedEmployees.length / employeesPerPage
+);
+
 
   // Dashboard Data
   const totalEmployees = employees.length;
@@ -137,6 +185,36 @@ function EmployeeList({ refresh, setSelectedEmployee }) {
             />
           </div>
 
+<div className="mb-3">
+  <select
+    className="form-select"
+    value={departmentFilter}
+    onChange={(e) => setDepartmentFilter(e.target.value)}
+  >
+    <option value="All">All Departments</option>
+    <option value="IT">IT</option>
+    <option value="HR">HR</option>
+    <option value="Marketing">Marketing</option>
+    <option value="Sales">Sales</option>
+  </select>
+</div>
+
+<div className="mb-3">
+  <select
+    className="form-select"
+    value={sortBy}
+    onChange={(e) => setSortBy(e.target.value)}
+  >
+    <option value="">Sort By</option>
+    <option value="name">Name (A-Z)</option>
+    <option value="salaryLow">Salary (Low to High)</option>
+    <option value="salaryHigh">Salary (High to Low)</option>
+  </select>
+</div>
+
+
+
+
           {/* Table */}
           <table className="table table-bordered table-hover text-center align-middle">
 
@@ -153,11 +231,11 @@ function EmployeeList({ refresh, setSelectedEmployee }) {
             </thead>
 
             <tbody>
-              {filteredEmployees.length > 0 ? (
-                filteredEmployees.map((employee, index) => (
+              {currentEmployees.length > 0 ? (
+                currentEmployees.map((employee, index) => (
                   <tr key={employee._id}>
 
-                    <td>{index + 1}</td>
+                   <td>{indexOfFirstEmployee + index + 1}</td>
 
                     <td>{employee.name}</td>
 
@@ -197,6 +275,30 @@ function EmployeeList({ refresh, setSelectedEmployee }) {
             </tbody>
 
           </table>
+
+          <div className="d-flex justify-content-center mt-3">
+
+  <button
+    className="btn btn-secondary me-2"
+    disabled={currentPage === 1}
+    onClick={() => setCurrentPage(currentPage - 1)}
+  >
+    Previous
+  </button>
+
+  <span className="align-self-center fw-bold">
+    Page {currentPage} of {totalPages}
+  </span>
+
+  <button
+    className="btn btn-secondary ms-2"
+    disabled={currentPage === totalPages}
+    onClick={() => setCurrentPage(currentPage + 1)}
+  >
+    Next
+  </button>
+
+</div>
 
         </div>
 
