@@ -3,6 +3,8 @@ import {
   getEmployees,
   deleteEmployee,
 } from "../services/employeeService";
+import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 function EmployeeList({ refresh, setSelectedEmployee }) {
   const [employees, setEmployees] = useState([]);
@@ -22,22 +24,33 @@ function EmployeeList({ refresh, setSelectedEmployee }) {
   };
 
   const handleDelete = async (id) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this employee?"
-    );
 
-    if (!confirmDelete) return;
+  const result = await Swal.fire({
+    title: "Delete Employee?",
+    text: "You won't be able to recover this employee!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#dc3545",
+    cancelButtonColor: "#6c757d",
+    confirmButtonText: "Yes, Delete",
+    cancelButtonText: "Cancel",
+  });
 
-    try {
-      await deleteEmployee(id);
+  if (!result.isConfirmed) return;
 
-      alert("Employee Deleted Successfully");
+  try {
+    await deleteEmployee(id);
 
-      fetchEmployees();
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    toast.success("Employee Deleted Successfully");
+
+    fetchEmployees();
+
+  } catch (error) {
+    console.log(error);
+
+    toast.error("Delete Failed!");
+  }
+};
 
   // Search Filter
   const filteredEmployees = employees.filter((employee) =>

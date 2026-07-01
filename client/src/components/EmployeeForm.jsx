@@ -3,6 +3,7 @@ import {
   createEmployee,
   updateEmployee,
 } from "../services/employeeService";
+import { toast } from "react-toastify";
 
 function EmployeeForm({
   refresh,
@@ -19,6 +20,8 @@ function EmployeeForm({
     position: "",
     salary: ""
   });
+
+   const [loading, setLoading] = useState(false);
 
  useEffect(() => {
   if (selectedEmployee) {
@@ -42,23 +45,37 @@ function EmployeeForm({
     });
   };
 
- const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
   e.preventDefault();
 
+  // Validation
+  if (
+    !employee.name ||
+    !employee.email ||
+    !employee.phone ||
+    !employee.department ||
+    !employee.position ||
+    !employee.salary
+  ) {
+    toast.warning("Please fill all fields.");
+    return;
+  }
+
+  setLoading(true);
+ 
+
+
+
+
   try {
-
     if (selectedEmployee) {
-
       await updateEmployee(selectedEmployee._id, employee);
 
-      alert("Employee Updated Successfully");
-
+      toast.success("Employee Updated Successfully");
     } else {
-
       await createEmployee(employee);
 
-      alert("Employee Added Successfully");
-
+      toast.success("Employee Added Successfully");
     }
 
     setEmployee({
@@ -73,9 +90,12 @@ function EmployeeForm({
     setSelectedEmployee(null);
 
     setRefresh(!refresh);
+    setLoading(false);
 
   } catch (error) {
     console.log(error);
+     toast.error("Something went wrong!");
+   setLoading(false);
   }
 };
 
@@ -154,11 +174,16 @@ function EmployeeForm({
           />
         </div>
 
-        <button
-             className="btn btn-primary w-100"
-                 type="submit"
+       <button
+            className="btn btn-primary w-100"
+            type="submit"
+            disabled={loading}
          >
-                {selectedEmployee ? "Update Employee" : "Add Employee"}
+           {loading
+               ? "Saving..."
+               : selectedEmployee
+               ? "Update Employee"
+               : "Add Employee"}
         </button>
 
       </form>
