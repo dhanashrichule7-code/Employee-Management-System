@@ -27,13 +27,19 @@ const employeesPerPage = 5;
   }, [refresh]);
 
   const fetchEmployees = async () => {
-    try {
-      const data = await getEmployees();
-      setEmployees(data.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  console.log("fetchEmployees called");
+
+  try {
+    const data = await getEmployees();
+
+    console.log("API Response:", data);
+
+    setEmployees(data.data);
+  } catch (error) {
+    console.log("API Error:", error.response);
+    console.log(error);
+  }
+};
 
   const handleDelete = async (id) => {
 

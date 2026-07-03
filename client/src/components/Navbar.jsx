@@ -1,4 +1,17 @@
+import { useNavigate } from "react-router-dom";
+
 function Navbar({ darkMode, setDarkMode }) {
+  const navigate = useNavigate();
+
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
+    window.location.href = "/login";
+  };
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary shadow">
       <div className="container">
@@ -7,12 +20,64 @@ function Navbar({ darkMode, setDarkMode }) {
           Employee Management System
         </h3>
 
-        <button
-          className="btn btn-light"
-          onClick={() => setDarkMode(!darkMode)}
-        >
-          {darkMode ? "☀️ Light" : "🌙 Dark"}
-        </button>
+        <div className="d-flex align-items-center gap-3">
+
+          {/* Profile Dropdown */}
+          <div className="dropdown">
+
+            <button
+              className="btn btn-outline-light dropdown-toggle"
+              type="button"
+              data-bs-toggle="dropdown"
+            >
+              👤 {user?.name}
+            </button>
+
+            <ul className="dropdown-menu dropdown-menu-end">
+
+              <li>
+                <button
+                    className="dropdown-item"
+                    onClick={() => navigate("/profile")}
+                  >
+                       👤 My Profile
+                 </button>
+              </li>
+
+              <li>
+                <button
+                    className="dropdown-item"
+                    onClick={() => navigate("/change-password")}
+                 >
+                        🔒 Change Password
+                </button>
+              </li>
+
+              <li>
+                <hr className="dropdown-divider" />
+              </li>
+
+              <li>
+                <button
+                  className="dropdown-item text-danger"
+                  onClick={handleLogout}
+                >
+                  🚪 Logout
+                </button>
+              </li>
+
+            </ul>
+
+          </div>
+
+          <button
+            className="btn btn-light"
+            onClick={() => setDarkMode(!darkMode)}
+          >
+            {darkMode ? "☀️ Light" : "🌙 Dark"}
+          </button>
+
+        </div>
 
       </div>
     </nav>

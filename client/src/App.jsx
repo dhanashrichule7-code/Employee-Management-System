@@ -1,9 +1,18 @@
 import { useState } from "react";
-import Home from "./pages/Home";
+import { Routes, Route, Navigate } from "react-router-dom";
+
 import Navbar from "./components/Navbar";
+
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import MyProfile from "./pages/MyProfile";
+import ChangePassword from "./pages/ChangePassword";
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
+
+  const token = localStorage.getItem("token");
 
   return (
     <div
@@ -13,12 +22,69 @@ function App() {
           : "bg-light min-vh-100"
       }
     >
-      <Navbar
-        darkMode={darkMode}
-        setDarkMode={setDarkMode}
-      />
+      {token && (
+        <Navbar
+          darkMode={darkMode}
+          setDarkMode={setDarkMode}
+        />
+      )}
 
-      <Home />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            token ? (
+              <Home darkMode={darkMode} />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+
+        <Route
+          path="/login"
+          element={
+            token ? (
+              <Navigate to="/" replace />
+            ) : (
+              <Login />
+            )
+          }
+        />
+
+        <Route
+          path="/register"
+          element={
+            token ? (
+              <Navigate to="/" replace />
+            ) : (
+              <Register />
+            )
+          }
+        />
+
+        <Route
+          path="/profile"
+          element={
+            token ? (
+              <MyProfile />
+            ) : (
+              <Navigate to="/login" replace />
+           )
+          }
+        />
+
+      <Route
+        path="/change-password"
+        element={
+          token ? (
+             <ChangePassword />
+          ) : (
+             <Navigate to="/login" replace />
+          )
+        }
+      />
+      </Routes>
     </div>
   );
 }
