@@ -3,8 +3,10 @@ import { useNavigate, Link } from "react-router-dom";
 import { loginUser } from "../services/authService";
 import { toast } from "react-toastify";
 
+
 function Login() {
   const navigate = useNavigate();
+ 
 
   const [formData, setFormData] = useState({
     email: "",
@@ -32,7 +34,7 @@ function Login() {
         "Saved Token:",
         localStorage.getItem("token")
       );
-
+      
       toast.success(data.message);
 
       // Force page reload after login

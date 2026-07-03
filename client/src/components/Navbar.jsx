@@ -1,10 +1,12 @@
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext } from "../context/UserContext";
 
 function Navbar({ darkMode, setDarkMode }) {
   const navigate = useNavigate();
-
   const user = JSON.parse(localStorage.getItem("user"));
 
+  
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -16,8 +18,12 @@ function Navbar({ darkMode, setDarkMode }) {
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary shadow">
       <div className="container">
 
-        <h3 className="text-white mb-0">
-          Employee Management System
+        <h3
+           className="text-white mb-0"
+           style={{ cursor: "pointer" }}
+           onClick={() => navigate("/")}
+         >
+             Employee Management System
         </h3>
 
         <div className="d-flex align-items-center gap-3">
@@ -35,6 +41,17 @@ function Navbar({ darkMode, setDarkMode }) {
 
             <ul className="dropdown-menu dropdown-menu-end">
 
+
+            <li>
+               <button
+                  className="dropdown-item"
+                  onClick={() => navigate("/")}
+               >
+                 🏠 Home
+               </button>
+            </li>
+
+
               <li>
                 <button
                     className="dropdown-item"
@@ -43,6 +60,14 @@ function Navbar({ darkMode, setDarkMode }) {
                        👤 My Profile
                  </button>
               </li>
+             
+             <button
+                 className="dropdown-item"
+                 onClick={() => navigate("/edit-profile")}
+              >
+                 ✏ Edit Profile
+            </button>
+
 
               <li>
                 <button

@@ -8,6 +8,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import MyProfile from "./pages/MyProfile";
 import ChangePassword from "./pages/ChangePassword";
+import EditProfile from "./pages/EditProfile";
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -70,20 +71,31 @@ function App() {
               <MyProfile />
             ) : (
               <Navigate to="/login" replace />
-           )
+            )
           }
         />
 
-      <Route
-        path="/change-password"
-        element={
-          token ? (
-             <ChangePassword />
-          ) : (
-             <Navigate to="/login" replace />
-          )
-        }
-      />
+        <Route
+          path="/change-password"
+          element={
+            token ? (
+              <ChangePassword />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+
+        <Route
+          path="/edit-profile"
+          element={
+            token ? (
+              <EditProfile />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
       </Routes>
     </div>
   );
