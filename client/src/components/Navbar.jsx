@@ -36,7 +36,14 @@ function Navbar({ darkMode, setDarkMode }) {
               type="button"
               data-bs-toggle="dropdown"
             >
-              👤 {user?.name}
+              <span
+  className="bg-light text-primary rounded-circle d-inline-flex align-items-center justify-content-center me-2"
+  style={{ width: "30px", height: "30px", fontWeight: "bold" }}
+>
+ {user?.name?.[0]?.toUpperCase()}
+</span>
+
+{user?.name}
             </button>
 
             <ul className="dropdown-menu dropdown-menu-end">

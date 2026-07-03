@@ -2,8 +2,7 @@ import { useState } from "react";
 import EmployeeList from "../components/EmployeeList";
 import EmployeeForm from "../components/EmployeeForm";
 
-function Home() {
-
+function Home({ darkMode }) {
   const [refresh, setRefresh] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
 
@@ -15,16 +14,18 @@ function Home() {
       </h1>
 
       <EmployeeForm
-  refresh={refresh}
-  setRefresh={setRefresh}
-  selectedEmployee={selectedEmployee}
-  setSelectedEmployee={setSelectedEmployee}
-/>
+        refresh={refresh}
+        setRefresh={setRefresh}
+        selectedEmployee={selectedEmployee}
+        setSelectedEmployee={setSelectedEmployee}
+        darkMode={darkMode}
+      />
 
       <EmployeeList
-  refresh={refresh}
-  setSelectedEmployee={setSelectedEmployee}
-/>
+        refresh={refresh}
+        setSelectedEmployee={setSelectedEmployee}
+        darkMode={darkMode}
+      />
 
     </div>
   );

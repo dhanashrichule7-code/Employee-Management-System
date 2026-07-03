@@ -24,7 +24,15 @@ function MyProfile() {
       </div>
     );
   }
+   let profileCompletion = 0;
 
+if (user.name) profileCompletion += 25;
+if (user.email) profileCompletion += 25;
+
+// User account hai to password bhi set hai
+profileCompletion += 25;
+
+// Avatar upload abhi nahi hai
   return (
     <div className="container mt-5" style={{ maxWidth: "600px" }}>
       <div className="card shadow p-4">
@@ -32,8 +40,28 @@ function MyProfile() {
         <h2 className="text-center mb-4">
           👤 My Profile
         </h2>
+  <div className="mb-4">
 
+  <div className="d-flex justify-content-between mb-2">
+    <strong>Profile Completion</strong>
+    <span>{profileCompletion}%</span>
+  </div>
+
+  <div className="progress" style={{ height: "10px" }}>
+    <div
+      className="progress-bar bg-success"
+      role="progressbar"
+      style={{ width: `${profileCompletion}%` }}
+      aria-valuenow={profileCompletion}
+      aria-valuemin="0"
+      aria-valuemax="100"
+    ></div>
+  </div>
+
+</div>
         <hr />
+
+
 
         <h5>
           <strong>Name :</strong> {user.name}
@@ -47,6 +75,26 @@ function MyProfile() {
           <strong>Joined :</strong>{" "}
           {new Date(user.createdAt).toLocaleDateString()}
         </h5>
+
+
+        <hr />
+
+<h5 className="mt-3">
+  {user.name ? "✅" : "❌"} Name Added
+</h5>
+
+<h5 className="mt-2">
+  {user.email ? "✅" : "❌"} Email Added
+</h5>
+
+<h5 className="mt-2">
+  ✅ Password Set
+</h5>
+
+<h5 className="mt-2 text-danger">
+  ❌ Profile Photo Not Added
+</h5>
+
 
       </div>
     </div>

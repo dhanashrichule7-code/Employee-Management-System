@@ -13,7 +13,7 @@ import autoTable from "jspdf-autotable";
 
 
 
-function EmployeeList({ refresh, setSelectedEmployee, darkMode }) {
+function EmployeeList({ refresh, setSelectedEmployee, darkMode, }) {
   const [employees, setEmployees] = useState([]);
   const [search, setSearch] = useState("");
   const [departmentFilter, setDepartmentFilter] = useState("All");
