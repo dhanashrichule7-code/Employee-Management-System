@@ -9,13 +9,35 @@ const {
 } = require("../controllers/employeeController");
 
 const authMiddleware = require("../middleware/authMiddleware");
+const roleMiddleware = require("../middleware/roleMiddleware");
 
-router.post("/", authMiddleware, createEmployee);
 
-router.get("/", authMiddleware, getAllEmployees);
+router.post(
+  "/",
+  authMiddleware,
+  roleMiddleware("admin"),
+  createEmployee
+);
 
-router.put("/:id", authMiddleware, updateEmployee);
+router.get(
+  "/",
+  authMiddleware,
+  roleMiddleware("admin"),
+  getAllEmployees
+);
 
-router.delete("/:id", authMiddleware, deleteEmployee);
+router.put(
+  "/:id",
+  authMiddleware,
+  roleMiddleware("admin"),
+  updateEmployee
+);
+
+router.delete(
+  "/:id",
+  authMiddleware,
+  roleMiddleware("admin"),
+  deleteEmployee
+);
 
 module.exports = router;

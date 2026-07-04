@@ -76,12 +76,13 @@ const login = async (req, res) => {
       message: "Login Successful",
       token,
       user: {
-        id: user._id,
+         id: user._id,
         name: user.name,
         email: user.email,
-        photo: user.photo,      
-        createdAt: user.createdAt
-      },
+        role: user.role,
+        photo: user.photo,
+        createdAt: user.createdAt,
+       },
     });
 
   } catch (error) {
