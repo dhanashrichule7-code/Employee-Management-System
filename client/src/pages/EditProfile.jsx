@@ -5,11 +5,16 @@ import { updateProfile } from "../services/updateProfileService";
 import { toast } from "react-toastify";
 
 function EditProfile() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
   });
+
+  const [image, setImage] = useState(null);
+  const [originalUser, setOriginalUser] = useState({});
+  const [preview, setPreview] = useState("");
 
   useEffect(() => {
     fetchProfile();
@@ -24,6 +29,20 @@ function EditProfile() {
         email: data.user.email,
       });
 
+      // Original data save
+      setOriginalUser(data.user);
+
+      // Current profile photo preview
+      if (data.user.photo) {
+        setPreview(
+          `http://localhost:5000/uploads/${data.user.photo}`
+        );
+      } else {
+        setPreview(
+          `https://ui-avatars.com/api/?name=${data.user.name}`
+        );
+      }
+
     } catch (error) {
       console.log(error);
     }
@@ -36,35 +55,87 @@ function EditProfile() {
     });
   };
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+
+    if (!file) return;
+
+    setImage(file);
+
+    // Image Preview
+    setPreview(URL.createObjectURL(file));
+  };
+
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
-    const data = await updateProfile(formData);
+    // No Changes Validation
+    if (
+      formData.name === originalUser.name &&
+      formData.email === originalUser.email &&
+      !image
+    ) {
+      toast.info("No changes detected");
+      return;
+    }
 
-    localStorage.setItem(
-      "user",
-      JSON.stringify(data.user)
-    );
+    try {
+      const updateData = new FormData();
 
-    toast.success(data.message);
+      updateData.append("name", formData.name);
+      updateData.append("email", formData.email);
 
-    navigate("/profile");
+      if (image) {
+        updateData.append("photo", image);
+      }
 
-  } catch (error) {
-    toast.error(
-      error.response?.data?.message || "Something went wrong"
-    );
-  }
-};
+      const data = await updateProfile(updateData);
+
+      localStorage.setItem(
+        "user",
+        JSON.stringify(data.user)
+      );
+
+      toast.success(data.message);
+
+      navigate("/profile");
+
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message ||
+          "Something went wrong"
+      );
+    }
+  };
 
   return (
-    <div className="container mt-5" style={{ maxWidth: "550px" }}>
+    <div
+      className="container mt-5"
+      style={{ maxWidth: "550px" }}
+    >
       <div className="card shadow p-4">
 
         <h2 className="text-center mb-4">
           ✏ Edit Profile
         </h2>
+
+        {/* Current Photo Preview */}
+
+        <div className="text-center mb-4">
+
+          <img
+            src={preview}
+            alt="Profile"
+            className="rounded-circle shadow"
+            style={{
+              width: "130px",
+              height: "130px",
+              objectFit: "cover",
+              border: "4px solid #0d6efd",
+            }}
+          />
+
+        </div>
 
         <form onSubmit={handleSubmit}>
 
@@ -88,7 +159,11 @@ function EditProfile() {
             required
           />
 
-          <button className="btn btn-primary w-100">
+         
+
+          <button
+            className="btn btn-primary w-100"
+          >
             Save Changes
           </button>
 

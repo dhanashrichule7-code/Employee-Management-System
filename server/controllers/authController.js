@@ -79,6 +79,8 @@ const login = async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
+        photo: user.photo,      
+        createdAt: user.createdAt
       },
     });
 
@@ -176,7 +178,9 @@ const updateProfile = async (req, res) => {
 
     user.name = name;
     user.email = email;
-
+    if (req.file) {
+    user.photo = req.file.filename;
+   }
     await user.save();
 
     res.status(200).json({
@@ -194,10 +198,74 @@ const updateProfile = async (req, res) => {
 };
 
 
+// ================= Update Photo =================
+const updatePhoto = async (req, res) => {
+  try {
+    // File select nahi ki
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: "Please select a photo",
+      });
+    }
+
+    const user = await User.findById(req.user.id);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    // New Photo Save
+    user.photo = req.file.filename;
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Profile Photo Updated Successfully",
+      user,
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+
+const removePhoto = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+
+    user.photo = "";
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Photo Removed Successfully",
+      user,
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   register,
   login,
   getProfile,
   changePassword,
   updateProfile,
+  updatePhoto,
+  removePhoto,
 };

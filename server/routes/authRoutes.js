@@ -8,9 +8,13 @@ const {
   getProfile,
   changePassword,
   updateProfile,
+  updatePhoto,
+  removePhoto,
 } = require("../controllers/authController");
 
 const authMiddleware = require("../middleware/authMiddleware");
+const upload = require("../middleware/upload");
+
 
 router.post("/register", register);
 
@@ -29,4 +33,16 @@ router.put(
   updateProfile
 );
 
+router.put(
+  "/update-photo",
+  authMiddleware,
+  upload.single("photo"),
+  updatePhoto
+);
+
+router.delete(
+  "/remove-photo",
+  authMiddleware,
+  removePhoto
+);
 module.exports = router;
