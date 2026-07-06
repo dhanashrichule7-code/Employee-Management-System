@@ -32,6 +32,25 @@ function EmployeeAnalytics() {
     "#EC4899",
   ];
 
+const CustomBarTooltip = ({ active, payload }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-white border rounded shadow p-2">
+        <p className="fw-bold mb-1">
+          {payload[0].payload.department}
+        </p>
+
+        <p className="text-primary mb-0">
+          Employees : {payload[0].value}
+        </p>
+      </div>
+    );
+  }
+
+  return null;
+};
+
+
   const fetchAnalytics = async () => {
     try {
       const data = await getEmployeeAnalytics();
@@ -81,11 +100,12 @@ function EmployeeAnalytics() {
 
                 <YAxis allowDecimals={false} />
 
-                <Tooltip />
+                <Tooltip content={<CustomBarTooltip />} />
 
                 <Bar
-                  dataKey="count"
-                  radius={[8, 8, 0, 0]}
+                      dataKey="count"
+                      radius={[8, 8, 0, 0]}
+                      label={{ position: "top", fill: "#333", fontWeight: "bold" }}
                 >
                   {departmentData.map((entry, index) => (
                     <Cell
@@ -117,7 +137,9 @@ function EmployeeAnalytics() {
                   cx="50%"
                   cy="50%"
                   outerRadius={120}
-                  label
+                  label={({ percent }) =>
+                  `${(percent * 100).toFixed(0)}%`
+                }
                 >
                   {genderData.map((entry, index) => (
                     <Cell
