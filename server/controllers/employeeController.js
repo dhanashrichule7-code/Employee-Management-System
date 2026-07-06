@@ -107,10 +107,51 @@ const updateEmployee = async (req, res) => {
   }
 };
 
+// Dashboard Statistics
+const getDashboardStats = async (req, res) => {
+  try {
+    const employees = await Employee.find();
+
+    const totalEmployees = employees.length;
+
+    const maleEmployees = employees.filter(
+      (emp) => emp.gender?.toLowerCase() === "male"
+    ).length;
+
+    const femaleEmployees = employees.filter(
+      (emp) => emp.gender?.toLowerCase() === "female"
+    ).length;
+
+    const departments = [
+      ...new Set(
+        employees
+          .map((emp) => emp.department)
+          .filter(Boolean)
+      ),
+    ].length;
+
+    res.status(200).json({
+      success: true,
+      data: {
+        totalEmployees,
+        maleEmployees,
+        femaleEmployees,
+        departments,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 // Export Controllers
 module.exports = {
   createEmployee,
   getAllEmployees,
   deleteEmployee,
   updateEmployee,
+  getDashboardStats,
 };

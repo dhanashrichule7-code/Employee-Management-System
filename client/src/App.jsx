@@ -17,11 +17,10 @@ function App() {
 
   return (
     <div
-      className={
-        darkMode
-          ? "bg-dark text-white min-vh-100"
-          : "bg-light min-vh-100"
-      }
+      className={darkMode ? "bg-dark text-white" : ""}
+      style={{
+        minHeight: "100vh",
+      }}
     >
       {token && (
         <Navbar

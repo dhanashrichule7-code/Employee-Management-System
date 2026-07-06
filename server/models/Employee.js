@@ -30,6 +30,13 @@ const employeeSchema = new mongoose.Schema(
       required: true,
     },
 
+    // ⭐ New Field
+    gender: {
+      type: String,
+      enum: ["Male", "Female", "Other"],
+      required: true,
+    },
+
     salary: {
       type: Number,
       required: true,

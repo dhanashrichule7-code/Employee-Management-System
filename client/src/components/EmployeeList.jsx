@@ -13,12 +13,16 @@ import autoTable from "jspdf-autotable";
 
 
 
-function EmployeeList({ refresh, setSelectedEmployee, darkMode, }) {
+function EmployeeList({
+  refresh,
+  setRefresh,
+  setSelectedEmployee,
+  darkMode,
+}) {
   const [employees, setEmployees] = useState([]);
   const [search, setSearch] = useState("");
   const [departmentFilter, setDepartmentFilter] = useState("All");
   const [sortBy, setSortBy] = useState("");
-
   const [currentPage, setCurrentPage] = useState(1);
 const employeesPerPage = 5;
 
@@ -57,11 +61,15 @@ const employeesPerPage = 5;
   if (!result.isConfirmed) return;
 
   try {
-    await deleteEmployee(id);
+   await deleteEmployee(id);
 
-    toast.success("Employee Deleted Successfully");
+toast.success("Employee Deleted Successfully");
 
-    fetchEmployees();
+// Table update
+fetchEmployees();
+
+// Dashboard update
+setRefresh((prev) => !prev);
 
   } catch (error) {
     console.log(error);
@@ -121,13 +129,14 @@ const totalPages = Math.ceil(
 
 const exportToExcel = () => {
   const data = filteredEmployees.map((emp) => ({
-    Name: emp.name,
-    Email: emp.email,
-    Phone: emp.phone,
-    Department: emp.department,
-    Position: emp.position,
-    Salary: emp.salary,
-  }));
+  Name: emp.name,
+  Email: emp.email,
+  Phone: emp.phone,
+  Department: emp.department,
+  Position: emp.position,
+  Gender: emp.gender,
+  Salary: emp.salary,
+}));
 
   const worksheet = XLSX.utils.json_to_sheet(data);
   const workbook = XLSX.utils.book_new();
@@ -148,7 +157,6 @@ const exportToExcel = () => {
 };
 
 const exportToPDF = () => {
-
   const doc = new jsPDF();
 
   doc.setFontSize(18);
@@ -162,7 +170,8 @@ const exportToPDF = () => {
       "Phone",
       "Department",
       "Position",
-      "Salary"
+      "Gender",
+      "Salary",
     ]],
 
     body: filteredEmployees.map((emp) => [
@@ -171,7 +180,8 @@ const exportToPDF = () => {
       emp.phone,
       emp.department,
       emp.position,
-      `Rs. ${emp.salary}`,
+      emp.gender,
+      `₹ ${emp.salary}`,
     ]),
   });
 
@@ -180,175 +190,106 @@ const exportToPDF = () => {
 
 
 
-  // Dashboard Data
-  const totalEmployees = employees.length;
-
-  const itEmployees = employees.filter(
-    (emp) => emp.department.toLowerCase() === "it"
-  ).length;
-
-  const hrEmployees = employees.filter(
-    (emp) => emp.department.toLowerCase() === "hr"
-  ).length;
-
-  const totalSalary = employees.reduce(
-    (total, emp) => total + Number(emp.salary),
-    0
-  );
+  
 
   return (
-    <div className="container mt-5">
+    <div className="container-fluid px-4 py-4">
 
-      {/* Dashboard Cards */}
-      <div className="row mb-4">
-
-        <div className="col-md-3">
-          <div
-          className={`card text-center shadow border-0 ${
-            darkMode
-          ? "bg-dark text-white border-light"
-          : "bg-primary text-white"
-         }`}
-         >
-            <div className="card-body">
-              <h5>Total Employees</h5>
-              <h2>{totalEmployees}</h2>
-            </div>
-          </div>
-        </div>
-
-        <div className="col-md-3">
-          <div
-           className={`card text-center shadow border-0 ${
-             darkMode
-            ? "bg-dark text-white border-light"
-            : "bg-primary text-white"
-           }`}
-          >
-            <div className="card-body">
-              <h5>IT Department</h5>
-              <h2>{itEmployees}</h2>
-            </div>
-          </div>
-        </div>
-
-        <div className="col-md-3">
-          <div
-            className={`card text-center shadow border-0 ${
-            darkMode
-            ? "bg-dark text-white border-light"
-            : "bg-primary text-white"
-           }`}
-          >
-            <div className="card-body">
-              <h5>HR Department</h5>
-              <h2>{hrEmployees}</h2>
-            </div>
-          </div>
-        </div>
-
-        <div className="col-md-3">
-          <div
-            className={`card text-center shadow border-0 ${
-            darkMode
-            ? "bg-dark text-white border-light"
-            : "bg-primary text-white"
-            }`}
-           >
-            <div className="card-body">
-              <h5>Total Salary</h5>
-              <h5>₹ {totalSalary}</h5>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      {/* Employee List */}
       <div
-        className={`card shadow ${
-       darkMode ? "bg-secondary text-white" : ""
-      }`}
+  className={`card border-0 shadow-lg rounded-4 ${
+    darkMode ? "bg-secondary text-white" : ""
+  }`}
+>
+
+      
+       <div className="card-header bg-white border-0 py-3">
+  <div className="d-flex justify-content-between align-items-center">
+
+    <h3 className="fw-bold mb-0 text-dark">
+      👥 Employee List
+    </h3>
+
+    <div className="d-flex gap-2">
+
+      <button
+        className="btn btn-success"
+        onClick={exportToExcel}
       >
-        <div className="card-header bg-primary text-white">
-          <h3 className="mb-0">Employee List</h3>
-        </div>
+        📗 Excel
+      </button>
 
-        <div
-           className={`card-body ${
-           darkMode ? "bg-secondary text-white" : ""
-          }`}
-         >
-          {/* Search Box */}
-          <div className="mb-3">
-            <input
-              type="text"
-              className={`form-control ${
-             darkMode ? "bg-dark text-white border-light" : ""
-            }`}
-              placeholder="Search Employee by Name..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </div>
+      <button
+        className="btn btn-danger"
+        onClick={exportToPDF}
+      >
+        📄 PDF
+      </button>
 
-<div className="mb-3">
-  <select
-    className={`form-select ${
-    darkMode ? "bg-dark text-white border-light" : ""
-    }`}
-    value={departmentFilter}
-    onChange={(e) => setDepartmentFilter(e.target.value)}
-  >
-    <option value="All">All Departments</option>
-    <option value="IT">IT</option>
-    <option value="HR">HR</option>
-    <option value="Marketing">Marketing</option>
-    <option value="Sales">Sales</option>
-  </select>
+    </div>
+
+  </div>
 </div>
+<div
+  className={`card-body ${
+    darkMode ? "bg-secondary text-white" : ""
+  }`}
+></div>
+        <div className="row mb-4">
 
-<div className="mb-3">
-  <select
-    className={`form-select ${
-    darkMode ? "bg-dark text-white border-light" : ""
-    }`}
-    value={sortBy}
-    onChange={(e) => setSortBy(e.target.value)}
-  >
-    <option value="">Sort By</option>
-    <option value="name">Name (A-Z)</option>
-    <option value="salaryLow">Salary (Low to High)</option>
-    <option value="salaryHigh">Salary (High to Low)</option>
-  </select>
-</div>
+  <div className="col-md-4">
+    <input
+      type="text"
+      className={`form-control ${
+        darkMode ? "bg-dark text-white border-light" : ""
+      }`}
+      placeholder="🔍 Search Employee..."
+      value={search}
+      onChange={(e) => setSearch(e.target.value)}
+    />
+  </div>
 
-    
- <div className="mb-3 d-flex justify-content-end gap-2">
+  <div className="col-md-4">
+    <select
+      className={`form-select ${
+        darkMode ? "bg-dark text-white border-light" : ""
+      }`}
+      value={departmentFilter}
+      onChange={(e) => setDepartmentFilter(e.target.value)}
+    >
+      <option value="All">All Departments</option>
+      <option value="IT">IT</option>
+      <option value="HR">HR</option>
+      <option value="Marketing">Marketing</option>
+      <option value="Sales">Sales</option>
+    </select>
+  </div>
 
-  <button
-    className="btn btn-success"
-    onClick={exportToExcel}
-  >
-    📗 Export Excel
-  </button>
-
-  <button
-    className="btn btn-danger"
-    onClick={exportToPDF}
-  >
-    📄 Export PDF
-  </button>
+  <div className="col-md-4">
+    <select
+      className={`form-select ${
+        darkMode ? "bg-dark text-white border-light" : ""
+      }`}
+      value={sortBy}
+      onChange={(e) => setSortBy(e.target.value)}
+    >
+      <option value="">Sort By</option>
+      <option value="name">Name (A-Z)</option>
+      <option value="salaryLow">Salary Low → High</option>
+      <option value="salaryHigh">Salary High → Low</option>
+    </select>
+  </div>
 
 </div>
 
 
           {/* Table */}
-          <table
-            className={`table table-bordered table-hover text-center align-middle ${
-            darkMode ? "table-dark" : ""
-          }`}
-          >
+          <div className="table-responsive">
+  <table
+    className={`table table-hover align-middle text-center mb-0 ${
+      darkMode ? "table-dark" : ""
+    }`}
+  >
+          
             <thead className={darkMode ? "table-dark" : "table-primary"}>
               <tr>
                 <th>Sr No.</th>
@@ -356,6 +297,7 @@ const exportToPDF = () => {
                 <th>Email</th>
                 <th>Department</th>
                 <th>Position</th>
+                <th>Gender</th>
                 <th>Salary</th>
                 <th>Actions</th>
               </tr>
@@ -375,6 +317,8 @@ const exportToPDF = () => {
                     <td>{employee.department}</td>
 
                     <td>{employee.position}</td>
+
+                    <td>{employee.gender}</td>
 
                     <td>₹ {employee.salary} </td>
 
@@ -400,43 +344,44 @@ const exportToPDF = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="7">No Employees Found</td>
+                  <td colSpan="8">No Employees Found</td>
                 </tr>
               )}
             </tbody>
 
           </table>
+          </div>
 
-          <div className="d-flex justify-content-center mt-3">
+          <div className="d-flex justify-content-between align-items-center mt-4">
 
   <button
-    className="btn btn-secondary me-2"
+    className="btn btn-outline-primary rounded-pill px-4"
     disabled={currentPage === 1}
     onClick={() => setCurrentPage(currentPage - 1)}
   >
-    Previous
+    ← Previous
   </button>
 
-  <span className="align-self-center fw-bold">
+  <span className="fw-semibold">
     Page {currentPage} of {totalPages}
   </span>
 
   <button
-    className="btn btn-secondary ms-2"
+    className="btn btn-outline-primary rounded-pill px-4"
     disabled={currentPage === totalPages}
     onClick={() => setCurrentPage(currentPage + 1)}
   >
-    Next
+    Next →
   </button>
 
 </div>
-
         </div>
 
       </div>
 
-    </div>
+    
   );
 }
 
 export default EmployeeList;
+
