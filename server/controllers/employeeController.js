@@ -122,6 +122,30 @@ const getDashboardStats = async (req, res) => {
       (emp) => emp.gender?.toLowerCase() === "female"
     ).length;
 
+    const totalSalary = employees.reduce(
+  (total, emp) => total + Number(emp.salary || 0),
+  0
+);
+
+const averageSalary =
+  totalEmployees > 0
+    ? Math.round(totalSalary / totalEmployees)
+    : 0;
+
+    const highestSalary =
+  employees.length > 0
+    ? Math.max(...employees.map((emp) => Number(emp.salary || 0)))
+    : 0;
+
+    const latestEmployee =
+  employees.length > 0
+    ? employees.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      )[0]
+    : null;
+
+
+
     const departments = [
       ...new Set(
         employees
@@ -133,10 +157,52 @@ const getDashboardStats = async (req, res) => {
     res.status(200).json({
       success: true,
       data: {
-        totalEmployees,
-        maleEmployees,
-        femaleEmployees,
-        departments,
+  totalEmployees,
+  maleEmployees,
+  femaleEmployees,
+  departments,
+
+  totalSalary,
+  averageSalary,
+  highestSalary,
+  latestEmployee,
+},
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+
+
+// Employee Analytics
+const getEmployeeAnalytics = async (req, res) => {
+  try {
+    const employees = await Employee.find();
+
+    // Department Wise Employee Count
+    const departmentMap = {};
+
+    employees.forEach((emp) => {
+      if (departmentMap[emp.department]) {
+        departmentMap[emp.department]++;
+      } else {
+        departmentMap[emp.department] = 1;
+      }
+    });
+
+    const departmentData = Object.keys(departmentMap).map((dept) => ({
+      department: dept,
+      count: departmentMap[dept],
+    }));
+
+    res.status(200).json({
+      success: true,
+      data: {
+        departmentData,
       },
     });
   } catch (error) {
@@ -154,4 +220,5 @@ module.exports = {
   deleteEmployee,
   updateEmployee,
   getDashboardStats,
+  getEmployeeAnalytics,
 };

@@ -7,6 +7,7 @@ const {
   updateEmployee,
   deleteEmployee,
   getDashboardStats,
+  getEmployeeAnalytics,
 } = require("../controllers/employeeController");
 
 const authMiddleware = require("../middleware/authMiddleware");
@@ -33,6 +34,13 @@ router.get(
   getDashboardStats
 );
 
+router.get(
+  "/analytics",
+  authMiddleware,
+  roleMiddleware("admin"),
+  getEmployeeAnalytics
+);
+
 router.put(
   "/:id",
   authMiddleware,
@@ -46,5 +54,6 @@ router.delete(
   roleMiddleware("admin"),
   deleteEmployee
 );
+
 
 module.exports = router;

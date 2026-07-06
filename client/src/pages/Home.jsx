@@ -3,6 +3,7 @@ import EmployeeForm from "../components/EmployeeForm";
 import EmployeeList from "../components/EmployeeList";
 import EmployeeDashboard from "./EmployeeDashboard";
 import AdminDashboard from "../components/AdminDashboard";
+import EmployeeAnalytics from "../components/EmployeeAnalytics";
 
 function Home({ darkMode }) {
   const [refresh, setRefresh] =useState(false);
@@ -71,6 +72,7 @@ function Home({ darkMode }) {
     darkMode={darkMode}
 />
 
+<EmployeeAnalytics />
       </div>
 
     </div>
