@@ -1,29 +1,36 @@
 import { useEffect, useState } from "react";
 import { getEmployeeAnalytics } from "../services/analyticsService";
 
-
 import {
+  ResponsiveContainer,
   BarChart,
   Bar,
   XAxis,
   YAxis,
-  Tooltip,
   CartesianGrid,
-  ResponsiveContainer,
+  Tooltip,
   Cell,
+  PieChart,
+  Pie,
+  Legend,
 } from "recharts";
 
 function EmployeeAnalytics() {
-
   const [departmentData, setDepartmentData] = useState([]);
+  const [genderData, setGenderData] = useState([]);
 
   const COLORS = [
-  "#2563eb",
-  "#16a34a",
-  "#f59e0b",
-  "#dc2626",
-  "#9333ea",
-];
+    "#2563eb",
+    "#16a34a",
+    "#f59e0b",
+    "#dc2626",
+    "#9333ea",
+  ];
+
+  const PIE_COLORS = [
+    "#3B82F6",
+    "#EC4899",
+  ];
 
   const fetchAnalytics = async () => {
     try {
@@ -32,6 +39,7 @@ function EmployeeAnalytics() {
       console.log("Department Data:", data.data.departmentData);
 
       setDepartmentData(data.data.departmentData);
+      setGenderData(data.data.genderData);
 
     } catch (error) {
       console.log(error);
@@ -49,47 +57,89 @@ function EmployeeAnalytics() {
         📊 Employee Analytics
       </h3>
 
-      <div style={{ width: "100%", height: 420 }}>
-  <ResponsiveContainer>
+      <div className="row">
 
-    <BarChart
-      data={departmentData}
-      margin={{
-        top: 20,
-        right: 20,
-        left: 0,
-        bottom: 10,
-      }}
-    >
+        {/* Department Bar Chart */}
+        <div className="col-lg-7">
 
-      <CartesianGrid
-        strokeDasharray="3 3"
-      />
+          <div style={{ width: "100%", height: 420 }}>
+            <ResponsiveContainer width="100%" height="100%">
 
-      <XAxis dataKey="department" />
+              <BarChart
+                data={departmentData}
+                margin={{
+                  top: 20,
+                  right: 20,
+                  left: 0,
+                  bottom: 10,
+                }}
+              >
 
-      <YAxis allowDecimals={false} />
+                <CartesianGrid strokeDasharray="3 3" />
 
-      <Tooltip />
+                <XAxis dataKey="department" />
 
-      <Bar
-        dataKey="count"
-        radius={[8, 8, 0, 0]}
-      >
+                <YAxis allowDecimals={false} />
 
-        {departmentData.map((entry, index) => (
-          <Cell
-            key={index}
-            fill={COLORS[index % COLORS.length]}
-          />
-        ))}
+                <Tooltip />
 
-      </Bar>
+                <Bar
+                  dataKey="count"
+                  radius={[8, 8, 0, 0]}
+                >
+                  {departmentData.map((entry, index) => (
+                    <Cell
+                      key={index}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  ))}
+                </Bar>
 
-    </BarChart>
+              </BarChart>
 
-  </ResponsiveContainer>
-</div>
+            </ResponsiveContainer>
+          </div>
+
+        </div>
+
+        {/* Gender Pie Chart */}
+        <div className="col-lg-5">
+
+          <div style={{ width: "100%", height: 420 }}>
+            <ResponsiveContainer width="100%" height="100%">
+
+              <PieChart>
+
+                <Pie
+                  data={genderData}
+                  dataKey="value"
+                  nameKey="name"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={120}
+                  label
+                >
+                  {genderData.map((entry, index) => (
+                    <Cell
+                      key={index}
+                      fill={PIE_COLORS[index % PIE_COLORS.length]}
+                    />
+                  ))}
+                </Pie>
+
+                <Tooltip />
+
+                <Legend />
+
+              </PieChart>
+
+            </ResponsiveContainer>
+          </div>
+
+        </div>
+
+      </div>
+
     </div>
   );
 }

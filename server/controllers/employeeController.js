@@ -199,12 +199,34 @@ const getEmployeeAnalytics = async (req, res) => {
       count: departmentMap[dept],
     }));
 
+    // Gender Wise Employee Count
+    const maleEmployees = employees.filter(
+      (emp) => emp.gender?.toLowerCase() === "male"
+    ).length;
+
+    const femaleEmployees = employees.filter(
+      (emp) => emp.gender?.toLowerCase() === "female"
+    ).length;
+
+    const genderData = [
+      {
+        name: "Male",
+        value: maleEmployees,
+      },
+      {
+        name: "Female",
+        value: femaleEmployees,
+      },
+    ];
+
     res.status(200).json({
       success: true,
       data: {
         departmentData,
+        genderData,
       },
     });
+
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -212,6 +234,9 @@ const getEmployeeAnalytics = async (req, res) => {
     });
   }
 };
+
+
+
 
 // Export Controllers
 module.exports = {
