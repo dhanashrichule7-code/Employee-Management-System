@@ -15,7 +15,7 @@ import {
   Legend,
 } from "recharts";
 
-function EmployeeAnalytics() {
+function EmployeeAnalytics({ refresh }) {
   const [departmentData, setDepartmentData] = useState([]);
   const [genderData, setGenderData] = useState([]);
 
@@ -67,7 +67,7 @@ const CustomBarTooltip = ({ active, payload }) => {
 
   useEffect(() => {
     fetchAnalytics();
-  }, []);
+  }, [refresh]);
 
   return (
     <div className="card border-0 shadow-lg rounded-4 mt-4 p-4">

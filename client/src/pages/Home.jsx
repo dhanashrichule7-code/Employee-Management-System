@@ -72,7 +72,9 @@ function Home({ darkMode }) {
     darkMode={darkMode}
 />
 
-<EmployeeAnalytics />
+<EmployeeAnalytics refresh={refresh} />
+
+
       </div>
 
     </div>

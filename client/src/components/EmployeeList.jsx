@@ -19,6 +19,25 @@ function EmployeeList({
   setSelectedEmployee,
   darkMode,
 }) {
+
+const getAvatarColor = (name) => {
+    const colors = [
+      "#2563eb",
+      "#16a34a",
+      "#9333ea",
+      "#ea580c",
+      "#dc2626",
+      "#0891b2",
+      "#ca8a04",
+      "#4f46e5",
+    ];
+
+    return colors[name.charCodeAt(0) % colors.length];
+  };
+
+
+
+  const [viewEmployee, setViewEmployee] = useState(null);
   const [employees, setEmployees] = useState([]);
   const [search, setSearch] = useState("");
   const [departmentFilter, setDepartmentFilter] = useState("All");
@@ -32,6 +51,9 @@ const employeesPerPage = 5;
 
   const fetchEmployees = async () => {
   console.log("fetchEmployees called");
+
+
+
 
   try {
     const data = await getEmployees();
@@ -137,6 +159,9 @@ const exportToExcel = () => {
   Gender: emp.gender,
   Salary: emp.salary,
 }));
+
+
+
 
   const worksheet = XLSX.utils.json_to_sheet(data);
   const workbook = XLSX.utils.book_new();
@@ -282,6 +307,165 @@ const exportToPDF = () => {
 </div>
 
 
+{viewEmployee && (
+  <div
+    className="modal fade show"
+    style={{
+      display: "block",
+      backgroundColor: "rgba(0,0,0,0.5)",
+    }}
+  >
+    <div className="modal-dialog modal-lg modal-dialog-centered">
+      <div className="modal-content">
+
+        <div className="modal-header">
+          <h4 className="modal-title">
+            👤 Employee Details
+          </h4>
+
+          <button
+            className="btn-close"
+            onClick={() => setViewEmployee(null)}
+          ></button>
+        </div>
+
+        <div className="modal-body">
+
+          <div className="row">
+
+           
+
+  <div className="col-md-4 text-center border-end">
+
+  {
+  viewEmployee.photo ? (
+
+    <img
+      src={`http://localhost:5000/uploads/${viewEmployee.photo}`}
+      className="rounded-circle shadow"
+      style={{
+        width: "170px",
+        height: "170px",
+        objectFit: "cover",
+      }}
+      alt={viewEmployee.name}
+    />
+
+  ) : (
+
+    <div
+      className="rounded-circle shadow d-flex align-items-center justify-content-center text-white fw-bold"
+      style={{
+        width: "170px",
+        height: "170px",
+        margin: "0 auto",
+        background: getAvatarColor(viewEmployee.name),
+        fontSize: "70px",
+      }}
+    >
+      {viewEmployee.name.charAt(0).toUpperCase()}
+    </div>
+
+  )
+}
+
+  <h4 className="mt-3 fw-bold">
+    {viewEmployee.name}
+  </h4>
+
+  <p className="text-muted mb-2">
+    {viewEmployee.position}
+  </p>
+
+  <span className="badge bg-primary fs-6 px-3 py-2">
+    {viewEmployee.department}
+  </span>
+
+</div>
+
+            <div className="col-md-8">
+
+              <table className="table">
+
+                <tbody>
+
+                  <tr>
+                    <th>Name</th>
+                    <td>{viewEmployee.name}</td>
+                  </tr>
+
+                  <tr>
+                    <th>Email</th>
+                    <td>{viewEmployee.email}</td>
+                  </tr>
+
+                  <tr>
+                    <th>Phone</th>
+                    <td>{viewEmployee.phone}</td>
+                  </tr>
+
+                  
+
+                  <tr>
+                    <th>Gender</th>
+                    <td>
+                       <span className={`badge ${
+                      viewEmployee.gender === "Male"
+                     ? "bg-primary"
+                    : "bg-danger"
+                 }`}
+                  >
+                 {viewEmployee.gender}
+              </span>
+             </td>
+             </tr>
+
+
+                   <tr>
+                     <th>Joining Date</th>
+                   <td>
+                    {new Date(viewEmployee.createdAt).toLocaleDateString()}
+                  </td>
+               </tr>
+
+                 
+
+                  <tr>
+                    <th>Salary</th>
+                    <td>
+                    <span className="badge bg-success fs-6">
+                    ₹ {Number(viewEmployee.salary).toLocaleString("en-IN")}
+                   </span>
+                  </td>
+                  </tr>
+
+                </tbody>
+
+              </table>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div className="modal-footer">
+
+          <button
+            className="btn btn-secondary"
+            onClick={() => setViewEmployee(null)}
+          >
+            Close
+          </button>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+)}
+
+
           {/* Table */}
           <div className="table-responsive">
   <table
@@ -320,9 +504,19 @@ const exportToPDF = () => {
 
                     <td>{employee.gender}</td>
 
-                    <td>₹ {employee.salary} </td>
+                    
+                   <td>₹ {employee.salary} </td>
 
                     <td>
+
+<button
+  className="btn btn-info btn-sm me-2"
+  onClick={() => setViewEmployee(employee)}
+>
+  View
+</button>
+
+
 
                       <button
                         className="btn btn-warning btn-sm me-2"

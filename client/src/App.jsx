@@ -9,6 +9,7 @@ import Register from "./pages/Register";
 import MyProfile from "./pages/MyProfile";
 import ChangePassword from "./pages/ChangePassword";
 import EditProfile from "./pages/EditProfile";
+import Footer from "./components/Footer";
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -96,6 +97,9 @@ function App() {
           }
         />
       </Routes>
+
+      {/* Footer */}
+{token && <Footer darkMode={darkMode} />}
     </div>
   );
 }

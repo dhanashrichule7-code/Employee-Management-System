@@ -20,6 +20,9 @@ function Navbar({ darkMode, setDarkMode }) {
     };
   }, []);
 
+  // Check User Role
+  const isAdmin = user?.role?.toLowerCase() === "admin";
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -35,8 +38,7 @@ function Navbar({ darkMode, setDarkMode }) {
     >
       <div className="container-fluid px-4">
 
-        {/* Logo + Title */}
-
+        {/* Logo */}
         <div
           className="d-flex align-items-center"
           style={{ cursor: "pointer" }}
@@ -59,17 +61,16 @@ function Navbar({ darkMode, setDarkMode }) {
             </h3>
 
             <small className="text-light">
-              Admin Portal
+              {isAdmin ? "Admin Portal" : "Employee Portal"}
             </small>
           </div>
         </div>
 
+        {/* Right Side */}
         <div className="d-flex align-items-center gap-3">
 
           {/* Profile */}
-
           <div className="dropdown">
-
             <button
               className="btn btn-light dropdown-toggle d-flex align-items-center shadow-sm"
               data-bs-toggle="dropdown"
@@ -159,7 +160,6 @@ function Navbar({ darkMode, setDarkMode }) {
           </div>
 
           {/* Dark Mode */}
-
           <button
             className="btn btn-light shadow-sm"
             onClick={() => setDarkMode(!darkMode)}

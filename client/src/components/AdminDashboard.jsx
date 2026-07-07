@@ -1,21 +1,96 @@
 import { useEffect, useState } from "react";
 import { getDashboardStats } from "../services/dashboardService";
 
+const dashboardCards = (stats) => [
+  {
+    title: "Total Employees",
+    value: stats.totalEmployees,
+    subtitle: "Registered Employees",
+    icon: "👥",
+    bg: "#eff6ff",
+    color: "#2563eb",
+    valueClass: "text-primary",
+  },
+  {
+    title: "Male",
+    value: stats.maleEmployees,
+    subtitle: "Male Employees",
+    icon: "👨",
+    bg: "#ecfdf5",
+    color: "#16a34a",
+    valueClass: "text-success",
+  },
+  {
+    title: "Female",
+    value: stats.femaleEmployees,
+    subtitle: "Female Employees",
+    icon: "👩",
+    bg: "#fef2f2",
+    color: "#dc2626",
+    valueClass: "text-danger",
+  },
+  {
+    title: "Departments",
+    value: stats.departments,
+    subtitle: "Active Departments",
+    icon: "🏢",
+    bg: "#fffbeb",
+    color: "#f59e0b",
+    valueClass: "text-warning",
+  },
+  {
+    title: "Total Salary",
+    value: `₹ ${stats.totalSalary.toLocaleString()}`,
+    subtitle: "Company Payroll",
+    icon: "💰",
+    bg: "#ecfdf5",
+    color: "#059669",
+    valueClass: "text-success",
+  },
+  {
+    title: "Average Salary",
+    value: `₹ ${stats.averageSalary.toLocaleString()}`,
+    subtitle: "Per Employee",
+    icon: "📈",
+    bg: "#eff6ff",
+    color: "#2563eb",
+    valueClass: "text-primary",
+  },
+  {
+    title: "Highest Salary",
+    value: `₹ ${stats.highestSalary.toLocaleString()}`,
+    subtitle: "Maximum Package",
+    icon: "🏆",
+    bg: "#fffbeb",
+    color: "#d97706",
+    valueClass: "text-warning",
+  },
+  {
+    title: "Latest Employee",
+    value: stats.latestEmployee?.name || "N/A",
+    subtitle: stats.latestEmployee?.department || "",
+    icon: "🆕",
+    bg: "#ecfeff",
+    color: "#06b6d4",
+    valueClass: "text-info",
+  },
+];
+
 function AdminDashboard({ refresh }) {
   const [stats, setStats] = useState({
-  totalEmployees: 0,
-  maleEmployees: 0,
-  femaleEmployees: 0,
-  departments: 0,
-  totalSalary: 0,
-  averageSalary: 0,
-  highestSalary: 0,
-  latestEmployee: null,
-});
+    totalEmployees: 0,
+    maleEmployees: 0,
+    femaleEmployees: 0,
+    departments: 0,
+    totalSalary: 0,
+    averageSalary: 0,
+    highestSalary: 0,
+    latestEmployee: null,
+  });
 
- useEffect(() => {
-  fetchStats();
-}, [refresh]);
+  useEffect(() => {
+    fetchStats();
+  }, [refresh]);
 
   const fetchStats = async () => {
     try {
@@ -27,171 +102,83 @@ function AdminDashboard({ refresh }) {
   };
 
   return (
-   <div className="row g-4 mt-n5 position-relative">
 
-      {/* Total Employees */}
-      <div className="col-lg-3 col-md-6 mb-4">
+  <div className="row g-4 mt-n5 position-relative">
+
+  {dashboardCards(stats).map((card, index) => (
+
+    <div
+      className="col-lg-3 col-md-6 mb-4"
+      key={index}
+    >
+
+      <div className="card dashboard-card border-0 shadow h-100">
+
         <div
-  className="card border-0 shadow-lg rounded-4 text-center h-100"
-  style={{
-    transition: "0.3s",
-    cursor: "pointer",
-    minHeight: "240px",
-  }}
->
-      <div className="card-body d-flex flex-column justify-content-center">
-            <div style={{ fontSize: "60px" }}>👥</div>
-            <h5 className="mt-3">Total Employees</h5>
-            <h2 className="text-primary fw-bold">
-              {stats.totalEmployees}
-            </h2>
+          className="card-body text-center d-flex flex-column justify-content-center align-items-center"
+          style={{
+            padding: "25px 20px",
+          }}
+        >
+
+          <div
+            className="dashboard-icon"
+            style={{
+              background: card.bg,
+              color: card.color,
+              width: "65px",
+              height: "65px",
+              borderRadius: "50%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              fontSize: "30px",
+              marginBottom: "18px",
+            }}
+          >
+            {card.icon}
           </div>
+
+          <h5
+            style={{
+              fontWeight: "700",
+              marginBottom: "12px",
+            }}
+          >
+            {card.title}
+          </h5>
+
+          <h2
+            className={card.valueClass}
+            style={{
+              fontWeight: "800",
+              fontSize: "30px",
+              marginBottom: "8px",
+            }}
+          >
+            {card.value}
+          </h2>
+
+          <p
+            className="text-muted"
+            style={{
+              fontSize: "13px",
+              marginBottom: 0,
+            }}
+          >
+            {card.subtitle}
+          </p>
+
         </div>
+
       </div>
 
-      {/* Male */}
-      <div className="col-lg-3 col-md-6 mb-4">
-        <div
-  className="card border-0 shadow-lg rounded-4 text-center h-100"
-  style={{
-    transition: "0.3s",
-    cursor: "pointer",
-    minHeight: "240px",
-  }}
->
-     <div className="card-body d-flex flex-column justify-content-center">
-            <div style={{ fontSize: "60px" }}>👨</div>
-            <h5 className="mt-3">Male</h5>
-            <h2 className="text-success fw-bold">
-              {stats.maleEmployees}
-            </h2>
-          </div>
-        </div>
-      </div>
-
-      {/* Female */}
-      <div className="col-lg-3 col-md-6 mb-4">
-        <div
-  className="card border-0 shadow-lg rounded-4 text-center h-100"
-  style={{
-    transition: "0.3s",
-    cursor: "pointer",
-    minHeight: "240px",
-  }}
->
-         <div className="card-body d-flex flex-column justify-content-center">
-             <div style={{ fontSize: "60px" }}>👩</div>
-            <h5 className="mt-3">Female</h5>
-            <h2 className="text-danger fw-bold">
-              {stats.femaleEmployees}
-            </h2>
-          </div>
-        </div>
-      </div>
-
-      {/* Departments */}
-      <div className="col-lg-3 col-md-6 mb-4">
-        <div
-  className="card border-0 shadow-lg rounded-4 text-center h-100"
-  style={{
-    transition: "0.3s",
-    cursor: "pointer",
-    minHeight: "240px",
-  }}
->
-          <div className="card-body d-flex flex-column justify-content-center">
-            <div style={{ fontSize: "60px" }}>🏢</div>
-            <h5 className="mt-3">Departments</h5>
-            <h2 className="text-warning fw-bold">
-              {stats.departments}
-            </h2>
-          </div>
-        </div>
-      </div>
-
-<div className="col-lg-3 col-md-6 mb-4">
-  <div
-    className="card border-0 shadow-lg rounded-4 text-center h-100"
-    style={{
-      transition: "0.3s",
-      cursor: "pointer",
-      minHeight: "240px",
-    }}
-  >
-    <div className="card-body d-flex flex-column justify-content-center">
-      <div style={{ fontSize: "60px" }}>💰</div>
-      <h5 className="mt-3">Total Salary</h5>
-      <h2 className="text-success fw-bold">
-        ₹ {stats.totalSalary.toLocaleString()}
-      </h2>
     </div>
-  </div>
+
+  ))}
+
 </div>
 
-<div className="col-lg-3 col-md-6 mb-4">
-  <div
-    className="card border-0 shadow-lg rounded-4 text-center h-100"
-    style={{
-      transition: "0.3s",
-      cursor: "pointer",
-      minHeight: "240px",
-    }}
-  >
-    <div className="card-body d-flex flex-column justify-content-center">
-      <div style={{ fontSize: "60px" }}>📈</div>
-      <h5 className="mt-3">Average Salary</h5>
-      <h2 className="text-primary fw-bold">
-        ₹ {stats.averageSalary.toLocaleString()}
-      </h2>
-    </div>
-  </div>
-</div>
-
-<div className="col-lg-3 col-md-6 mb-4">
-  <div
-    className="card border-0 shadow-lg rounded-4 text-center h-100"
-    style={{
-      transition: "0.3s",
-      cursor: "pointer",
-      minHeight: "240px",
-    }}
-  >
-    <div className="card-body d-flex flex-column justify-content-center">
-      <div style={{ fontSize: "60px" }}>🏆</div>
-      <h5 className="mt-3">Highest Salary</h5>
-      <h2 className="text-warning fw-bold">
-        ₹ {stats.highestSalary.toLocaleString()}
-      </h2>
-    </div>
-  </div>
-</div>
-
-<div className="col-lg-3 col-md-6 mb-4">
-  <div
-    className="card border-0 shadow-lg rounded-4 text-center h-100"
-    style={{
-      transition: "0.3s",
-      cursor: "pointer",
-      minHeight: "240px",
-    }}
-  >
-    <div className="card-body d-flex flex-column justify-content-center">
-      <div style={{ fontSize: "60px" }}>🆕</div>
-      <h5 className="mt-3">Latest Employee</h5>
-
-      <h4 className="text-info fw-bold">
-        {stats.latestEmployee?.name || "N/A"}
-      </h4>
-
-      <small className="text-muted">
-        {stats.latestEmployee?.department}
-      </small>
-    </div>
-  </div>
-</div>
-
-
-    </div>
   );
 }
 
