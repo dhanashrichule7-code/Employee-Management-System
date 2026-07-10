@@ -32,30 +32,68 @@ function EmployeeAnalytics({ refresh }) {
     "#EC4899",
   ];
 
-const CustomBarTooltip = ({ active, payload }) => {
-  if (active && payload && payload.length) {
-    return (
-      <div className="bg-white border rounded shadow p-2">
-        <p className="fw-bold mb-1">
-          {payload[0].payload.department}
-        </p>
+  // Bar Chart Tooltip
+  const CustomBarTooltip = ({ active, payload }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div
+          style={{
+            background: "#1f2937",
+            color: "#fff",
+            padding: "10px 15px",
+            borderRadius: "10px",
+            boxShadow: "0 8px 20px rgba(0,0,0,.3)",
+          }}
+        >
+          <p className="fw-bold mb-1">
+            {payload[0].payload.department}
+          </p>
 
-        <p className="text-primary mb-0">
-          Employees : {payload[0].value}
-        </p>
-      </div>
-    );
-  }
+          <p className="mb-0">
+            Employees : {payload[0].value}
+          </p>
+        </div>
+      );
+    }
 
-  return null;
-};
+    return null;
+  };
 
+  // Pie Chart Tooltip
+  const CustomPieTooltip = ({ active, payload }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div
+          style={{
+            background: "#1f2937",
+            color: "#fff",
+            padding: "10px 15px",
+            borderRadius: "10px",
+            boxShadow: "0 8px 20px rgba(0,0,0,.3)",
+          }}
+        >
+          <p
+            style={{
+              margin: 0,
+              fontWeight: "bold",
+            }}
+          >
+            {payload[0].name}
+          </p>
+
+          <p style={{ margin: 0 }}>
+            Employees : {payload[0].value}
+          </p>
+        </div>
+      );
+    }
+
+    return null;
+  };
 
   const fetchAnalytics = async () => {
     try {
       const data = await getEmployeeAnalytics();
-
-      console.log("Department Data:", data.data.departmentData);
 
       setDepartmentData(data.data.departmentData);
       setGenderData(data.data.genderData);
@@ -78,10 +116,12 @@ const CustomBarTooltip = ({ active, payload }) => {
 
       <div className="row">
 
-        {/* Department Bar Chart */}
+        {/* Department Chart */}
+
         <div className="col-lg-7">
 
           <div style={{ width: "100%", height: 420 }}>
+
             <ResponsiveContainer width="100%" height="100%">
 
               <BarChart
@@ -103,9 +143,13 @@ const CustomBarTooltip = ({ active, payload }) => {
                 <Tooltip content={<CustomBarTooltip />} />
 
                 <Bar
-                      dataKey="count"
-                      radius={[8, 8, 0, 0]}
-                      label={{ position: "top", fill: "#333", fontWeight: "bold" }}
+                  dataKey="count"
+                  radius={[8, 8, 0, 0]}
+                  label={{
+                    position: "top",
+                    fill: "#ffffff",
+                    fontWeight: "bold",
+                  }}
                 >
                   {departmentData.map((entry, index) => (
                     <Cell
@@ -118,14 +162,17 @@ const CustomBarTooltip = ({ active, payload }) => {
               </BarChart>
 
             </ResponsiveContainer>
+
           </div>
 
         </div>
 
         {/* Gender Pie Chart */}
+
         <div className="col-lg-5">
 
           <div style={{ width: "100%", height: 420 }}>
+
             <ResponsiveContainer width="100%" height="100%">
 
               <PieChart>
@@ -137,9 +184,18 @@ const CustomBarTooltip = ({ active, payload }) => {
                   cx="50%"
                   cy="50%"
                   outerRadius={120}
-                  label={({ percent }) =>
-                  `${(percent * 100).toFixed(0)}%`
-                }
+                  label={({ percent, x, y }) => (
+                    <text
+                      x={x}
+                      y={y}
+                      fill="#ffffff"
+                      textAnchor="middle"
+                      dominantBaseline="central"
+                      fontWeight="bold"
+                    >
+                      {(percent * 100).toFixed(0)}%
+                    </text>
+                  )}
                 >
                   {genderData.map((entry, index) => (
                     <Cell
@@ -149,13 +205,14 @@ const CustomBarTooltip = ({ active, payload }) => {
                   ))}
                 </Pie>
 
-                <Tooltip />
+                <Tooltip content={<CustomPieTooltip />} />
 
                 <Legend />
 
               </PieChart>
 
             </ResponsiveContainer>
+
           </div>
 
         </div>

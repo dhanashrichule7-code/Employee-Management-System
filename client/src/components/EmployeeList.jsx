@@ -148,6 +148,11 @@ const currentEmployees = sortedEmployees.slice(
 const totalPages = Math.ceil(
   sortedEmployees.length / employeesPerPage
 );
+useEffect(() => {
+  if (currentPage > totalPages && totalPages > 0) {
+    setCurrentPage(1);
+  }
+}, [currentPage, totalPages]);
 
 const exportToExcel = () => {
   const data = filteredEmployees.map((emp) => ({
@@ -227,10 +232,14 @@ const exportToPDF = () => {
 >
 
       
-       <div className="card-header bg-white border-0 py-3">
+       <div
+  className={`card-header border-0 py-3 ${
+    darkMode ? "bg-dark text-white" : "bg-white"
+  }`}
+>
   <div className="d-flex justify-content-between align-items-center">
 
-    <h3 className="fw-bold mb-0 text-dark">
+    <h3 className={`fw-bold mb-0 ${darkMode ? "text-white" : "text-dark"}`}>
       👥 Employee List
     </h3>
 
@@ -256,9 +265,9 @@ const exportToPDF = () => {
 </div>
 <div
   className={`card-body ${
-    darkMode ? "bg-secondary text-white" : ""
+    darkMode ? "bg-dark text-white" : ""
   }`}
-></div>
+>
         <div className="row mb-4">
 
   <div className="col-md-4">
@@ -269,7 +278,10 @@ const exportToPDF = () => {
       }`}
       placeholder="🔍 Search Employee..."
       value={search}
-      onChange={(e) => setSearch(e.target.value)}
+     onChange={(e) => {
+  setSearch(e.target.value);
+  setCurrentPage(1);
+}}
     />
   </div>
 
@@ -279,7 +291,10 @@ const exportToPDF = () => {
         darkMode ? "bg-dark text-white border-light" : ""
       }`}
       value={departmentFilter}
-      onChange={(e) => setDepartmentFilter(e.target.value)}
+      onChange={(e) => {
+  setDepartmentFilter(e.target.value);
+  setCurrentPage(1);
+}}
     >
       <option value="All">All Departments</option>
       <option value="IT">IT</option>
@@ -295,7 +310,10 @@ const exportToPDF = () => {
         darkMode ? "bg-dark text-white border-light" : ""
       }`}
       value={sortBy}
-      onChange={(e) => setSortBy(e.target.value)}
+      onChange={(e) => {
+  setSortBy(e.target.value);
+  setCurrentPage(1);
+}}
     >
       <option value="">Sort By</option>
       <option value="name">Name (A-Z)</option>
@@ -316,8 +334,11 @@ const exportToPDF = () => {
     }}
   >
     <div className="modal-dialog modal-lg modal-dialog-centered">
-      <div className="modal-content">
-
+      <div
+className={`modal-content ${
+darkMode ? "bg-dark text-white" : ""
+}`}
+>
         <div className="modal-header">
           <h4 className="modal-title">
             👤 Employee Details
@@ -470,8 +491,8 @@ const exportToPDF = () => {
           <div className="table-responsive">
   <table
     className={`table table-hover align-middle text-center mb-0 ${
-      darkMode ? "table-dark" : ""
-    }`}
+      darkMode ? "table-dark" : "table-striped"
+}`}
   >
           
             <thead className={darkMode ? "table-dark" : "table-primary"}>
@@ -505,7 +526,7 @@ const exportToPDF = () => {
                     <td>{employee.gender}</td>
 
                     
-                   <td>₹ {employee.salary} </td>
+                  <td>₹ {Number(employee.salary).toLocaleString("en-IN")}</td>
 
                     <td>
 
@@ -538,7 +559,12 @@ const exportToPDF = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="8">No Employees Found</td>
+                  <td
+  colSpan="8"
+  className={darkMode ? "text-white" : ""}
+>
+  No Employees Found
+</td>
                 </tr>
               )}
             </tbody>
@@ -556,7 +582,11 @@ const exportToPDF = () => {
     ← Previous
   </button>
 
-  <span className="fw-semibold">
+ <span
+ className={`fw-semibold ${
+ darkMode ? "text-white" : ""
+ }`}
+>
     Page {currentPage} of {totalPages}
   </span>
 
@@ -573,7 +603,7 @@ const exportToPDF = () => {
 
       </div>
 
-    
+    </div>
   );
 }
 

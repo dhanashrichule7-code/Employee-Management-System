@@ -18,13 +18,17 @@ function MyProfile() {
   }, []);
 
   const fetchProfile = async () => {
-    try {
-      const data = await getProfile();
-      setUser(data.user);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  try {
+    const data = await getProfile();
+
+    console.log("Profile API Response:", data);
+
+    setUser(data.user);
+
+  } catch (error) {
+    console.log(error);
+  }
+};
 
   if (!user) {
     return (
@@ -127,57 +131,61 @@ const handleRemovePhoto = async () => {
 
           <div className="col-md-4 text-center mb-3">
 
-            <img
-              src={
-                user.photo
-                  ? `http://localhost:5000/uploads/${user.photo}`
-                  : `https://ui-avatars.com/api/?name=${user.name}`
-              }
-              alt="Profile"
-              className="rounded-circle shadow"
-              style={{
-                width: "150px",
-                height: "150px",
-                objectFit: "cover",
-                border: "4px solid #0d6efd",
-                cursor: "pointer",
-                transition: "0.3s",
-              }}
-              title="Click to Change Photo"
-              onClick={() => setShowImage(true)}
-            />
-            {showImage && (
-  <div
-    className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
+  <img
+    src={
+      user.photo
+        ? `http://localhost:5000/uploads/${user.photo}`
+        : `https://ui-avatars.com/api/?name=${user.name}`
+    }
+    alt="Profile"
+    className="rounded-circle shadow"
     style={{
-      background: "rgba(0,0,0,0.8)",
-      zIndex: 9999,
+      width: "150px",
+      height: "150px",
+      objectFit: "cover",
+      border: "4px solid #0d6efd",
+      cursor: "pointer",
+      transition: "0.3s",
     }}
-    onClick={() => setShowImage(false)}
-  >
-    <img
-      src={`http://localhost:5000/uploads/${user.photo}`}
-      alt=""
+    title="Click to View Photo"
+    onClick={() => setShowImage(true)}
+  />
+
+  {showImage && (
+    <div
+      className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
       style={{
-        maxWidth: "80%",
-        maxHeight: "80%",
-        borderRadius: "10px",
+        background: "rgba(0,0,0,0.8)",
+        zIndex: 9999,
       }}
-      onClick={(e) => e.stopPropagation()}
-    />
+      onClick={() => setShowImage(false)}
+    >
+      <img
+        src={`http://localhost:5000/uploads/${user.photo}`}
+        alt=""
+        style={{
+          maxWidth: "80%",
+          maxHeight: "80%",
+          borderRadius: "10px",
+        }}
+        onClick={(e) => e.stopPropagation()}
+      />
+    </div>
+  )}
+
+ 
+
+  {/* Change Photo Button */}
+  <div className="mt-3 d-flex justify-content-center">
+    <button
+      className="btn btn-primary rounded-pill px-3 py-2"
+      onClick={() => setShowPhotoModal(true)}
+    >
+      📷 Change Photo
+    </button>
   </div>
-)}
 
-            <p
-  className="text-primary fw-semibold mt-3"
-  style={{ cursor: "pointer" }}
-  onClick={() => setShowPhotoModal(true)}
->
-  📷 Change Profile Photo
-</p>
-
-          </div>
-
+</div>
           {/* Right Side Details */}
 
           <div className="col-md-8">
@@ -231,6 +239,34 @@ const handleRemovePhoto = async () => {
             </div>
 
             <hr />
+
+      
+
+<div className="row mb-3">
+
+    <div className="col-4 fw-bold text-secondary">
+        Role
+    </div>
+
+    <div className="col-8">
+
+        <span
+            className={`badge ${
+                user.role === "admin"
+                    ? "bg-danger"
+                    : "bg-primary"
+            }`}
+        >
+            {user.role === "admin"
+                ? "Administrator"
+                : "Employee"}
+        </span>
+
+    </div>
+
+</div>
+
+
 
             <div className="row">
 

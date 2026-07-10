@@ -106,56 +106,129 @@ function Navbar({ darkMode, setDarkMode }) {
 
             <ul className="dropdown-menu dropdown-menu-end shadow">
 
-              <li>
-                <button
-                  className="dropdown-item"
-                  onClick={() => navigate("/")}
-                >
-                  🏠 Home
-                </button>
-              </li>
+  {/* ADMIN MENU */}
 
-              <li>
-                <button
-                  className="dropdown-item"
-                  onClick={() => navigate("/profile")}
-                >
-                  👤 My Profile
-                </button>
-              </li>
+  {isAdmin ? (
+    <>
 
-              <li>
-                <button
-                  className="dropdown-item"
-                  onClick={() => navigate("/edit-profile")}
-                >
-                  ✏ Edit Profile
-                </button>
-              </li>
+      <li>
+        <button
+          className="dropdown-item"
+          onClick={() => navigate("/")}
+        >
+          🏠 Dashboard
+        </button>
+      </li>
 
-              <li>
-                <button
-                  className="dropdown-item"
-                  onClick={() => navigate("/change-password")}
-                >
-                  🔒 Change Password
-                </button>
-              </li>
+      <li>
+        <button
+          className="dropdown-item"
+          onClick={() => navigate("/")}
+        >
+          👥 Employee Management
+        </button>
+      </li>
 
-              <li>
-                <hr className="dropdown-divider" />
-              </li>
+      <li>
+        <button
+          className="dropdown-item"
+          onClick={() => {
+            document
+              .getElementById("analytics-section")
+              ?.scrollIntoView({
+                behavior: "smooth",
+              });
+          }}
+        >
+          📊 Analytics
+        </button>
+      </li>
 
-              <li>
-                <button
-                  className="dropdown-item text-danger"
-                  onClick={handleLogout}
-                >
-                  🚪 Logout
-                </button>
-              </li>
+      <li>
+        <button
+          className="dropdown-item"
+          onClick={() => navigate("/profile")}
+        >
+          👤 My Profile
+        </button>
+      </li>
 
-            </ul>
+      <li>
+    <button
+      className="dropdown-item"
+      onClick={() => navigate("/edit-profile")}
+    >
+      ✏ Edit Profile
+    </button>
+  </li>
+
+  <li>
+    <button
+      className="dropdown-item"
+      onClick={() => navigate("/change-password")}
+    >
+      🔒 Change Password
+    </button>
+  </li>
+
+    </>
+  ) : (
+
+    <>
+      <li>
+        <button
+          className="dropdown-item"
+          onClick={() => navigate("/")}
+        >
+          🏠 Home
+        </button>
+      </li>
+
+      <li>
+        <button
+          className="dropdown-item"
+          onClick={() => navigate("/profile")}
+        >
+          👤 My Profile
+        </button>
+      </li>
+
+      <li>
+        <button
+          className="dropdown-item"
+          onClick={() => navigate("/edit-profile")}
+        >
+          ✏ Edit Profile
+        </button>
+      </li>
+
+      <li>
+        <button
+          className="dropdown-item"
+          onClick={() => navigate("/change-password")}
+        >
+          🔒 Change Password
+        </button>
+      </li>
+
+    </>
+
+  )}
+
+  <li>
+    <hr className="dropdown-divider" />
+  </li>
+
+  <li>
+    <button
+      className="dropdown-item text-danger"
+      onClick={handleLogout}
+    >
+      🚪 Logout
+    </button>
+  </li>
+
+</ul>
 
           </div>
 

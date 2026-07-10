@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const Employee = require("../models/Employee");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -105,6 +106,28 @@ const getProfile = async (req, res) => {
       });
     }
 
+    // Agar Employee login hai
+    if (user.role === "employee") {
+
+      const employee = await Employee.findOne({
+        email: user.email,
+      });
+
+      return res.status(200).json({
+        success: true,
+        user: {
+          ...user.toObject(),
+
+          phone: employee?.phone || "",
+          department: employee?.department || "",
+          position: employee?.position || "",
+          gender: employee?.gender || "",
+          salary: employee?.salary || "",
+        },
+      });
+    }
+
+    // Agar Admin login hai
     res.status(200).json({
       success: true,
       user,

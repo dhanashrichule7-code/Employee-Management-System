@@ -1,12 +1,23 @@
 import { useEffect, useState } from "react";
 import { getDashboardStats } from "../services/dashboardService";
 
+import {
+FaUsers,
+FaMars,
+FaVenus,
+FaBuilding,
+FaMoneyBillWave,
+FaChartLine,
+FaTrophy,
+FaUserPlus,
+} from "react-icons/fa6";
+
 const dashboardCards = (stats) => [
   {
     title: "Total Employees",
     value: stats.totalEmployees,
     subtitle: "Registered Employees",
-    icon: "👥",
+    icon: <FaUsers />,
     bg: "#eff6ff",
     color: "#2563eb",
     valueClass: "text-primary",
@@ -15,7 +26,7 @@ const dashboardCards = (stats) => [
     title: "Male",
     value: stats.maleEmployees,
     subtitle: "Male Employees",
-    icon: "👨",
+    icon: <FaMars />,
     bg: "#ecfdf5",
     color: "#16a34a",
     valueClass: "text-success",
@@ -24,7 +35,7 @@ const dashboardCards = (stats) => [
     title: "Female",
     value: stats.femaleEmployees,
     subtitle: "Female Employees",
-    icon: "👩",
+    icon: <FaVenus />,
     bg: "#fef2f2",
     color: "#dc2626",
     valueClass: "text-danger",
@@ -33,25 +44,25 @@ const dashboardCards = (stats) => [
     title: "Departments",
     value: stats.departments,
     subtitle: "Active Departments",
-    icon: "🏢",
+    icon: <FaBuilding />,
     bg: "#fffbeb",
     color: "#f59e0b",
     valueClass: "text-warning",
   },
   {
-    title: "Total Salary",
-    value: `₹ ${stats.totalSalary.toLocaleString()}`,
-    subtitle: "Company Payroll",
-    icon: "💰",
-    bg: "#ecfdf5",
-    color: "#059669",
-    valueClass: "text-success",
-  },
+  title: "Total Salary",
+  value: `₹ ${stats.totalSalary.toLocaleString()}`,
+  subtitle: "Company Payroll",
+  icon: <FaMoneyBillWave />,
+  bg: "#ecfdf5",
+  color: "#059669",
+  valueClass: "text-success",
+},
   {
     title: "Average Salary",
     value: `₹ ${stats.averageSalary.toLocaleString()}`,
     subtitle: "Per Employee",
-    icon: "📈",
+   icon: <FaChartLine />,
     bg: "#eff6ff",
     color: "#2563eb",
     valueClass: "text-primary",
@@ -60,7 +71,7 @@ const dashboardCards = (stats) => [
     title: "Highest Salary",
     value: `₹ ${stats.highestSalary.toLocaleString()}`,
     subtitle: "Maximum Package",
-    icon: "🏆",
+    icon: <FaTrophy />,
     bg: "#fffbeb",
     color: "#d97706",
     valueClass: "text-warning",
@@ -69,7 +80,7 @@ const dashboardCards = (stats) => [
     title: "Latest Employee",
     value: stats.latestEmployee?.name || "N/A",
     subtitle: stats.latestEmployee?.department || "",
-    icon: "🆕",
+    icon: <FaUserPlus />,
     bg: "#ecfeff",
     color: "#06b6d4",
     valueClass: "text-info",
@@ -126,14 +137,15 @@ function AdminDashboard({ refresh }) {
             style={{
               background: card.bg,
               color: card.color,
-              width: "65px",
-              height: "65px",
+              width: "70px",
+              height: "70px",
               borderRadius: "50%",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              fontSize: "30px",
+              fontSize: "34px",
               marginBottom: "18px",
+              boxShadow: "0 8px 20px rgba(0,0,0,0.08)",
             }}
           >
             {card.icon}
@@ -181,5 +193,7 @@ function AdminDashboard({ refresh }) {
 
   );
 }
+
+
 
 export default AdminDashboard;

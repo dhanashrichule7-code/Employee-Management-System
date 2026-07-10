@@ -130,6 +130,18 @@ a{
   box-shadow:0 20px 45px rgba(0,0,0,.12)!important;
 }
 
+
+.dashboard-card{
+  transition: all .3s ease;
+  border-top: 4px solid #2563eb;
+}
+
+.dashboard-card:hover{
+  transform: translateY(-8px);
+  box-shadow: 0 15px 30px rgba(0,0,0,.12) !important;
+}
+
+
 .dashboard-icon{
 width:78px;
 height:78px;
@@ -166,4 +178,138 @@ background:#2563eb;
 .dashboard-card .card-body{
     text-align:center;
     align-items:center;
+}
+
+/* ================= DARK MODE ================= */
+
+.dark-mode {
+  background: #0f172a !important;
+  color: #ffffff !important;
+  min-height: 100vh;
+}
+
+.dark-mode body {
+  background: #0f172a !important;
+}
+
+/* Cards */
+
+.dark-mode .card {
+  background: #1f2937 !important;
+  color: white !important;
+  border: none !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, .4) !important;
+}
+
+/* Dashboard Cards */
+
+.dark-mode .dashboard-card {
+  background: #1f2937 !important;
+  color: white !important;
+}
+
+.dark-mode .dashboard-title {
+  color: #d1d5db !important;
+}
+
+.dark-mode .dashboard-value {
+  color: white !important;
+}
+
+/* Forms */
+
+.dark-mode .form-control,
+.dark-mode .form-select {
+  background: #2b3035 !important;
+  color: white !important;
+  border: 1px solid #495057 !important;
+}
+
+.dark-mode .form-control::placeholder {
+  color: #adb5bd !important;
+}
+
+.dark-mode .form-control:focus,
+.dark-mode .form-select:focus {
+  background: #2b3035 !important;
+  color: white !important;
+  border-color: #0d6efd !important;
+  box-shadow: 0 0 0 .2rem rgba(13,110,253,.25) !important;
+}
+
+/* Table */
+
+.dark-mode .table {
+  color: white !important;
+}
+
+.dark-mode .table thead {
+  background: #111827 !important;
+  color: white !important;
+}
+
+.dark-mode .table tbody tr {
+  background: #1f2937 !important;
+  color: white !important;
+}
+
+.dark-mode .table tbody tr:hover {
+  background: #374151 !important;
+}
+
+/* Dropdown */
+
+.dark-mode .dropdown-menu {
+  background: #1f2937 !important;
+}
+
+.dark-mode .dropdown-item {
+  color: white !important;
+}
+
+.dark-mode .dropdown-item:hover {
+  background: #374151 !important;
+}
+
+/* Footer */
+
+.dark-mode footer {
+  background: #111827 !important;
+  color: white !important;
+}
+
+/* Analytics */
+
+.dark-mode .recharts-wrapper,
+.dark-mode .analytics-card {
+  background: #1f2937 !important;
+  border-radius: 15px;
+}
+
+/* Headings */
+
+.dark-mode h1,
+.dark-mode h2,
+.dark-mode h3,
+.dark-mode h4,
+.dark-mode h5,
+.dark-mode h6,
+.dark-mode p,
+.dark-mode span,
+.dark-mode label,
+.dark-mode small {
+  color: white !important;
+}
+
+/* Inputs Placeholder */
+
+.dark-mode input::placeholder {
+  color: #9ca3af !important;
+}
+
+/* Search & Select */
+
+.dark-mode input,
+.dark-mode select {
+  color: white !important;
 }
